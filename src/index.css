@@ -139,8 +139,8 @@ section { scroll-margin-top: 96px; }
 .profile-visuals { display: grid; grid-template-columns: 1.45fr .72fr .83fr; grid-template-rows: 500px; gap: 16px; margin-bottom: 80px; }
 .profile-photo { position: relative; min-width: 0; height: 100%; overflow: hidden; border-radius: 22px; background: #101414; }
 .profile-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s ease; }
-.profile-photo-main img { object-fit: contain; object-position: center center; transform: scale(.94); }
-.profile-photo-main:hover img { transform: scale(.96); }
+.profile-photo-main img { object-fit: cover; object-position: center top; transform: scale(1.01); }
+.profile-photo-main:hover img { transform: scale(1.025); }
 .profile-photo:not(.profile-photo-main):hover img { transform: scale(1.035); }
 .profile-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 58%, rgba(0,0,0,.72)); }
 .profile-photo > span { position: absolute; z-index: 2; left: 24px; bottom: 22px; color: white; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
@@ -165,7 +165,8 @@ section { scroll-margin-top: 96px; }
 .principles-sticky { position: sticky; top: 120px; align-self: start; }
 .principles-sticky h2 { max-width: 620px; margin: 44px 0 0; font-size: clamp(2.8rem, 3.8vw, 4.6rem); line-height: .96; letter-spacing: 0; text-transform: uppercase; }
 .principles-sticky h2 i { color: var(--lime); font-family: Georgia, serif; font-weight: 400; text-transform: lowercase; }
-.decision-visual { position: relative; width: min(100%, 610px); aspect-ratio: 4 / 3.12; margin: 48px 0 0; overflow: hidden; border-radius: 28px; background: radial-gradient(circle at 70% 20%, rgba(217,255,67,.22), transparent 28%), linear-gradient(135deg, #111616, #202735 56%, #121615); box-shadow: 0 34px 85px rgba(0,0,0,.32), inset 0 0 0 1px rgba(255,255,255,.12); isolation: isolate; }
+.decision-visual { position: relative; width: min(100%, 610px); aspect-ratio: 3 / 4; margin: 48px 0 0; overflow: hidden; border-radius: 28px; background: #f4f4f1; box-shadow: 0 34px 85px rgba(0,0,0,.32), inset 0 0 0 1px rgba(255,255,255,.12); isolation: isolate; }
+.decision-visual > img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: contrast(1.02); }
 .decision-visual::before { content: ""; position: absolute; inset: 0; z-index: 0; background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 34px 34px; mask-image: linear-gradient(180deg, rgba(0,0,0,.8), transparent); }
 .decision-grid { position: absolute; inset: 22px 22px 82px; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; transform: rotate(-2deg); }
 .creative-card { margin: 0; overflow: hidden; border-radius: 18px; background: rgba(255,255,255,.08); box-shadow: 0 20px 45px rgba(0,0,0,.3), inset 0 0 0 1px rgba(255,255,255,.16); }
@@ -379,13 +380,15 @@ section { scroll-margin-top: 96px; }
 .contact > div:first-child > p { max-width: 650px; margin: 0 0 80px; color: rgba(9,11,11,.6); font-size: 17px; line-height: 1.7; }
 .contact-vault { border-top: 1px solid rgba(9,11,11,.2); }
 .contact-row { overflow: hidden; border-bottom: 1px solid rgba(9,11,11,.2); }
-.contact-row > button { width: 100%; display: grid; grid-template-columns: 80px 1fr 60px; align-items: center; padding: 28px 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
+.contact-row > button { width: 100%; display: grid; grid-template-columns: 80px 1fr 60px; align-items: center; padding: 28px 0; border: 0; background: transparent; text-align: left; cursor: pointer; transition: padding .58s cubic-bezier(.22, 1, .36, 1); }
 .contact-row > button span { color: rgba(9,11,11,.38); font-size: 12px; }
 .contact-row > button span:last-child { color: var(--violet); font-size: 34px; text-align: right; }
 .contact-row > button b { font-size: clamp(2.2rem, 5vw, 5.2rem); line-height: 1; letter-spacing: 0; }
 .contact-row.is-open { background: var(--lime); }
-.contact-row.is-open > button, .contact-row.is-open .contact-reveal { padding-left: 28px; padding-right: 28px; }
-.contact-reveal { padding-bottom: 30px; }
+.contact-row.is-open > button { padding-left: 28px; padding-right: 28px; }
+.contact-row.is-open .contact-reveal-inner { padding-left: 28px; padding-right: 28px; }
+.contact-reveal { display: grid; overflow: hidden; will-change: grid-template-rows, opacity; }
+.contact-reveal-inner { min-height: 0; overflow: hidden; padding: 0 0 30px; transition: padding .58s cubic-bezier(.22, 1, .36, 1); }
 .contact-reveal small { display: block; margin-bottom: 12px; color: rgba(9,11,11,.55); }
 .contact-reveal a { display: flex; align-items: center; justify-content: space-between; font-size: clamp(1.5rem, 3vw, 3.2rem); font-weight: 700; letter-spacing: 0; }
 .contact footer { display: flex; justify-content: space-between; padding-top: 70px; color: rgba(9,11,11,.5); font-size: 11px; text-transform: uppercase; letter-spacing: .12em; }
@@ -445,7 +448,7 @@ section { scroll-margin-top: 96px; }
   .profile-visuals { grid-template-columns: 1fr; grid-template-rows: 430px 300px auto; gap: 10px; margin-bottom: 55px; }
   .profile-visual-note { grid-column: auto; min-height: 300px; }
   .principles { gap: 65px; }
-  .decision-visual { aspect-ratio: 1 / 1.16; margin-top: 32px; border-radius: 22px; }
+  .decision-visual { aspect-ratio: 3 / 4; margin-top: 32px; border-radius: 22px; }
   .decision-grid { inset: 14px 14px 120px; gap: 8px; }
   .report-card-main { left: 14px; bottom: 54px; width: 190px; padding: 14px 15px; }
   .report-card-main strong { font-size: 38px; }
@@ -490,7 +493,7 @@ section { scroll-margin-top: 96px; }
   .play-button { width: 70px; }
   .contact-row > button { grid-template-columns: 35px 1fr 35px; }
   .contact-row > button b { font-size: 34px; }
-  .contact-row.is-open > button, .contact-row.is-open .contact-reveal { padding-left: 14px; padding-right: 14px; }
+  .contact-row.is-open > button, .contact-row.is-open .contact-reveal-inner { padding-left: 14px; padding-right: 14px; }
   .contact-reveal a { font-size: 22px; overflow-wrap: anywhere; }
   .contact footer { gap: 18px; }
 }

@@ -276,6 +276,17 @@ function AlienAbductionScene({ active }: { active: boolean }) {
 
 function MarketingDecisionVisual() {
   return (
+    <motion.figure
+      whileHover={{ scale: 1.012, rotate: -0.25 }}
+      transition={{ duration: 0.45, ease }}
+      className="decision-visual"
+    >
+      <img src="/images/marketing/decision-handshake-cat.png" alt="" loading="lazy" />
+    </motion.figure>
+  );
+
+  /*
+  return (
     <motion.div
       whileHover={{ scale: 1.018, rotate: -0.4 }}
       transition={{ duration: 0.45, ease }}
@@ -307,6 +318,7 @@ function MarketingDecisionVisual() {
       <p>Решения рождаются там, где цифры, креативы и здравый смысл наконец-то разговаривают друг с другом.</p>
     </motion.div>
   );
+  */
 }
 
 function CaseDeck() {
@@ -426,18 +438,22 @@ function ContactVault() {
       {contacts.map((contact, index) => {
         const isOpen = revealed === contact.key;
         return (
-          <motion.div layout key={contact.key} className={`contact-row ${isOpen ? "is-open" : ""}`}>
+          <motion.div key={contact.key} className={`contact-row ${isOpen ? "is-open" : ""}`}>
             <button type="button" onClick={() => setRevealed(isOpen ? null : contact.key)} aria-expanded={isOpen}>
               <span>0{index + 1}</span><b>{contact.label}</b><span>{isOpen ? "−" : "+"}</span>
             </button>
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.45, ease }} className="contact-reveal">
-                  <small>{contact.note}</small>
-                  <a href={contact.href} target={contact.key === "telegram" ? "_blank" : undefined} rel={contact.key === "telegram" ? "noreferrer" : undefined}>{contact.value}<Arrow /></a>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <motion.div
+              initial={false}
+              animate={{ gridTemplateRows: isOpen ? "1fr" : "0fr", opacity: isOpen ? 1 : 0 }}
+              transition={{ duration: 0.58, ease }}
+              className="contact-reveal"
+              aria-hidden={!isOpen}
+            >
+              <div className="contact-reveal-inner">
+                <small>{contact.note}</small>
+                <a href={contact.href} target={contact.key === "telegram" ? "_blank" : undefined} rel={contact.key === "telegram" ? "noreferrer" : undefined}>{contact.value}<Arrow /></a>
+              </div>
+            </motion.div>
           </motion.div>
         );
       })}
