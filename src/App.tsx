@@ -49,6 +49,12 @@ function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
+const marketingCreativeImages = [
+  { src: "/images/marketing/b2c-7.png", alt: "Рекламный креатив Freedom Telecom" },
+  { src: "/images/marketing/b2c-4.png", alt: "Рекламный креатив со скоростным интернетом" },
+  { src: "/images/marketing/b2c-3.png", alt: "Рекламный креатив с тарифом" },
+];
+
 function AnimatedName() {
   const firstName = "Евгений";
   const lastName = "Корнилов";
@@ -268,6 +274,41 @@ function AlienAbductionScene({ active }: { active: boolean }) {
   );
 }
 
+function MarketingDecisionVisual() {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.018, rotate: -0.4 }}
+      transition={{ duration: 0.45, ease }}
+      className="decision-visual"
+      aria-label="Коллаж: маркетинговые отчёты, рекламные креативы и портрет"
+    >
+      <div className="decision-grid">
+        {marketingCreativeImages.map((image, index) => (
+          <figure className={`creative-card creative-card-${index + 1}`} key={image.src}>
+            <img src={image.src} alt={image.alt} loading="lazy" />
+          </figure>
+        ))}
+      </div>
+      <div className="report-card report-card-main">
+        <small>ROMI / funnel / MQL</small>
+        <strong>+117%</strong>
+        <span>рост клиентской базы</span>
+        <i />
+      </div>
+      <div className="report-card report-card-side">
+        <small>dashboard</small>
+        <div><b style={{ height: "64%" }} /><b style={{ height: "88%" }} /><b style={{ height: "46%" }} /><b style={{ height: "76%" }} /></div>
+      </div>
+      <div className="decision-face">
+        <img src={PROFILE_SELFIE_PATH} alt="Евгений Корнилов" loading="lazy" />
+      </div>
+      <span className="decision-glow decision-glow-1" />
+      <span className="decision-glow decision-glow-2" />
+      <p>Решения рождаются там, где цифры, креативы и здравый смысл наконец-то разговаривают друг с другом.</p>
+    </motion.div>
+  );
+}
+
 function CaseDeck() {
   const [active, setActive] = useState(0);
   const item = cases[active];
@@ -448,7 +489,6 @@ export default function App() {
               </motion.div>
               <motion.div className="hero-side-card" initial={{ opacity: 0, x: 44, rotate: 9, scale: 0.9 }} animate={{ opacity: 1, x: 0, rotate: 3, scale: 1 }} transition={{ duration: 1, delay: 0.5, ease }}>
                 <img src={STREET_CARD_PATH} alt="Евгений Корнилов на улице с коллегами" />
-                <span>people / context / taste</span>
               </motion.div>
             </div>
             <AnimatedName />
@@ -488,12 +528,9 @@ export default function App() {
 
         <motion.section {...sectionMotion} className="principles">
           <div className="principles-sticky">
-            <SectionLabel index="02">Операционная система</SectionLabel>
+            <SectionLabel index="02">Рабочий подход</SectionLabel>
             <h2>Как я принимаю <i>решения</i></h2>
-            <motion.figure whileHover={{ scale: 1.025, rotate: -1 }} transition={{ duration: 0.45, ease }} className="principles-image">
-              <img src={teamPhotos[0].src} alt={teamPhotos[0].alt} loading="lazy" />
-              <figcaption>Решения рождаются на стыке данных, людей и общего контекста.</figcaption>
-            </motion.figure>
+            <MarketingDecisionVisual />
           </div>
           <div className="principle-list">
             {principles.map((principle) => (
