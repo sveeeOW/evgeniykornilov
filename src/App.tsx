@@ -515,7 +515,12 @@ export default function App() {
         <motion.section {...sectionMotion} className="profile" id="profile">
           <Reveal><SectionLabel index="01">Профиль</SectionLabel></Reveal>
           <div className="profile-intro">
-            <Reveal><h2>Не «делаю рекламу». Строю <span>бизнес-функцию</span></h2></Reveal>
+            <Reveal>
+              <h2 className="profile-statement">
+                <small>Не «делаю рекламу»</small>
+                <strong>Строю <span>бизнес-функцию</span></strong>
+              </h2>
+            </Reveal>
             <EditorTyping text={profileBlocks[0].text} />
           </div>
           <div className="profile-visuals">
