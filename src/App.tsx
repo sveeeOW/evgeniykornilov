@@ -471,10 +471,13 @@ export default function App() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const skyY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["0vh", "1vh"] : ["0vh", "6vh"]);
-  const skyScale = useTransform(heroProgress, [0, 1], prefersReducedMotion ? [1.04, 1.04] : isMobileHero ? [1.02, 1.025] : [1.04, 1.08]);
-  const foregroundY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["1vh", "-6vh"] : ["2vh", "-16vh"]);
-  const foregroundScale = useTransform(heroProgress, [0, 1], prefersReducedMotion ? [1.02, 1.02] : isMobileHero ? [1.01, 1.05] : [1.02, 1.11]);
+  const skyY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["0vh", "1vh"] : ["0vh", "5vh"]);
+  const skyScale = useTransform(heroProgress, [0, 1], prefersReducedMotion ? [1.05, 1.05] : isMobileHero ? [1.04, 1.05] : [1.05, 1.08]);
+  const farFieldY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["0vh", "2vh"] : ["0vh", "8vh"]);
+  const foregroundY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["0vh", "4vh"] : ["0vh", "13vh"]);
+  const foregroundScale = useTransform(heroProgress, [0, 1], prefersReducedMotion ? [1, 1] : isMobileHero ? [1, 1.02] : [1, 1.05]);
+  const fogY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["0vh", "-1vh"] : ["0vh", "-5vh"]);
+  const ufoY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["0vh", "1vh"] : ["0vh", "3vh"]);
   const heroContentY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["0vh", "-1vh"] : ["0vh", "-3vh"]);
   const heroContentOpacity = useTransform(heroProgress, [0, 0.78, 1], prefersReducedMotion ? [1, 1, 1] : [1, 1, 0.87]);
 
@@ -506,8 +509,17 @@ export default function App() {
           <div className="hero-stage">
             <div className="hero-parallax" aria-hidden="true">
               <motion.img className="hero-parallax-sky" src="/images/hero/grove-street-sky.png" alt="" style={{ y: skyY, scale: skyScale }} />
-              <motion.img className="hero-parallax-foreground" src="/images/hero/grove-street-foreground.png" alt="" style={{ y: foregroundY, scale: foregroundScale }} />
+              <div className="hero-archive-stars" />
+              <motion.div className="hero-ufo-layer" style={{ y: ufoY }}>
+                <span className="archive-ufo archive-ufo-drift"><i /><b /><em /><small /></span>
+                <span className="archive-ufo archive-ufo-hover"><i /><b /><em /><small /></span>
+                <span className="archive-ufo archive-ufo-far"><i /><b /><em /><small /></span>
+              </motion.div>
+              <motion.div className="hero-far-field" style={{ y: farFieldY }} />
+              <motion.div className="hero-front-field" style={{ y: foregroundY, scale: foregroundScale }} />
+              <motion.div className="hero-archive-fog" style={{ y: fogY }}><i /><i /><i /></motion.div>
               <div className="hero-parallax-shade" />
+              <div className="hero-scanlines" />
             </div>
             <div className="hero-noise" />
             <motion.div className="hero-content" style={{ y: heroContentY, opacity: heroContentOpacity }}>
@@ -526,13 +538,34 @@ export default function App() {
               </div>
               <div className="hero-portrait-stack">
             <div className="hero-photo-cluster">
-              <motion.div className="hero-portrait" initial={{ opacity: 0, scale: 1.08, clipPath: "inset(15% 0 0 18% round 40px)" }} animate={{ opacity: 1, scale: 1, clipPath: "inset(0 0 0 0 round 40px)" }} transition={{ duration: 1.2, delay: 0.2, ease }}>
-                <img src={PROFILE_SELFIE_PATH} alt="Евгений Корнилов" />
-                <div className="portrait-badge"><span>9+</span><small>лет<br />в маркетинге</small></div>
-                <div className="portrait-orbit"><span>strategy · growth · revenue · </span></div>
+              <motion.div className="hero-flip-card hero-flip-primary" tabIndex={0} initial={{ opacity: 0, scale: 1.08 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2, delay: 0.2, ease }}>
+                <div className="hero-flip-inner">
+                  <div className="hero-flip-face hero-flip-front hero-portrait">
+                    <img src={PROFILE_SELFIE_PATH} alt="Евгений Корнилов" />
+                    <div className="portrait-badge"><span>9+</span><small>лет<br />в маркетинге</small></div>
+                    <div className="portrait-orbit"><span>strategy · growth · revenue · </span></div>
+                  </div>
+                  <div className="hero-flip-face hero-flip-back alien-case-file">
+                    <div className="case-file-head"><span>CASE FILE</span><b>09-117</b></div>
+                    <figure className="case-file-photo"><img src="/images/hero/archive-alien-subject.webp" alt="" /></figure>
+                    <dl><div><dt>SUBJECT</dt><dd>E. KORNILOV</dd></div><div><dt>STATUS</dt><dd>ACTIVE</dd></div><div><dt>THREAT LEVEL</dt><dd>STRATEGIC</dd></div></dl>
+                    <strong className="classified-stamp">CLASSIFIED</strong>
+                  </div>
+                </div>
               </motion.div>
-              <motion.div className="hero-side-card" initial={{ opacity: 0, x: 44, rotate: 9, scale: 0.9 }} animate={{ opacity: 1, x: 0, rotate: 3, scale: 1 }} transition={{ duration: 1, delay: 0.5, ease }}>
-                <img src={STREET_CARD_PATH} alt="Евгений Корнилов на улице с коллегами" />
+              <motion.div className="hero-flip-card hero-flip-secondary" tabIndex={0} initial={{ opacity: 0, x: 44, rotate: 9, scale: 0.9 }} animate={{ opacity: 1, x: 0, rotate: 3, scale: 1 }} transition={{ duration: 1, delay: 0.5, ease }}>
+                <div className="hero-flip-inner">
+                  <div className="hero-flip-face hero-flip-front hero-side-card">
+                    <img src={STREET_CARD_PATH} alt="Евгений Корнилов на улице с коллегами" />
+                  </div>
+                  <div className="hero-flip-face hero-flip-back incident-file">
+                    <div className="case-file-head"><span>FBI INCIDENT REPORT</span><b>REC-51</b></div>
+                    <figure className="case-file-photo incident-photo"><img src="/images/hero/archive-ufo-incident.webp" alt="" /></figure>
+                    <p>INCIDENT: UNIDENTIFIED AERIAL CONTACT</p>
+                    <dl><div><dt>LOCATION</dt><dd>CLASSIFIED</dd></div><div><dt>STATUS</dt><dd>ARCHIVED</dd></div></dl>
+                    <strong className="classified-stamp">ARCHIVE COPY</strong>
+                  </div>
+                </div>
               </motion.div>
             </div>
             <AnimatedName />
