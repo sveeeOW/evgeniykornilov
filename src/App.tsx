@@ -469,7 +469,7 @@ export default function App() {
   const [isMobileHero, setIsMobileHero] = useState(false);
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
-    offset: ["start start", "end end"],
+    offset: ["start start", "end start"],
   });
   const skyY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["0vh", "1vh"] : ["0vh", "6vh"]);
   const skyScale = useTransform(heroProgress, [0, 1], prefersReducedMotion ? [1.04, 1.04] : isMobileHero ? [1.02, 1.025] : [1.04, 1.08]);
