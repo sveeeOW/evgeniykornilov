@@ -505,9 +505,12 @@ section { scroll-margin-top: 96px; }
   .hero-photo-cluster { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .hero-flip-card, .hero-flip-face { border-radius: 24px; }
   .hero-flip-face.hero-portrait, .hero-flip-face.hero-side-card { height: 100%; min-height: 0; aspect-ratio: auto; border-radius: 24px; }
-  .hero-flip-card { pointer-events: none; }
-  .hero-flip-inner { transform: none !important; transition: none; }
-  .hero-flip-back { display: none; }
+  .hero-flip-card { cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  .hero-flip-inner { transform: rotateY(0deg); transition: transform .65s cubic-bezier(.22, 1, .36, 1); }
+  .hero-flip-back { display: block; }
+  .hero-flip-card:not(.is-flipped) .hero-flip-inner { transform: rotateY(0deg) !important; }
+  .hero-flip-card.is-flipped { z-index: 8; }
+  .hero-flip-card.is-flipped .hero-flip-inner { transform: rotateY(180deg) !important; }
   .portrait-badge { right: 8px; bottom: 8px; gap: 7px; padding: 8px 10px; border-radius: 12px; }
   .portrait-badge span { font-size: 25px; }
   .portrait-badge small { font-size: 7px; }

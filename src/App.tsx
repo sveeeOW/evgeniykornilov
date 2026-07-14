@@ -467,6 +467,7 @@ export default function App() {
   const heroRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const [isMobileHero, setIsMobileHero] = useState(false);
+  const [flippedHeroCard, setFlippedHeroCard] = useState<"primary" | "secondary" | null>(null);
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
@@ -487,11 +488,25 @@ export default function App() {
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 767px)");
-    const updateHeroMode = () => setIsMobileHero(media.matches);
+    const updateHeroMode = () => {
+      setIsMobileHero(media.matches);
+      if (!media.matches) setFlippedHeroCard(null);
+    };
     updateHeroMode();
     media.addEventListener("change", updateHeroMode);
     return () => media.removeEventListener("change", updateHeroMode);
   }, []);
+
+  const toggleHeroCard = (card: "primary" | "secondary") => {
+    if (!isMobileHero || prefersReducedMotion) return;
+    setFlippedHeroCard((current) => current === card ? null : card);
+  };
+
+  const handleHeroCardKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, card: "primary" | "secondary") => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    toggleHeroCard(card);
+  };
 
   return (
     <div className="cv-shell">
@@ -538,7 +553,7 @@ export default function App() {
               </div>
               <div className="hero-portrait-stack">
             <div className="hero-photo-cluster">
-              <motion.div className="hero-flip-card hero-flip-primary" tabIndex={0} initial={{ opacity: 0, scale: 1.08 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2, delay: 0.2, ease }}>
+              <motion.div className={`hero-flip-card hero-flip-primary${flippedHeroCard === "primary" ? " is-flipped" : ""}`} role="button" tabIndex={0} aria-pressed={flippedHeroCard === "primary"} onClick={() => toggleHeroCard("primary")} onKeyDown={(event) => handleHeroCardKeyDown(event, "primary")} initial={{ opacity: 0, scale: 1.08 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2, delay: 0.2, ease }}>
                 <div className="hero-flip-inner">
                   <div className="hero-flip-face hero-flip-front hero-portrait">
                     <img src={PROFILE_SELFIE_PATH} alt="Евгений Корнилов" />
@@ -553,7 +568,7 @@ export default function App() {
                   </div>
                 </div>
               </motion.div>
-              <motion.div className="hero-flip-card hero-flip-secondary" tabIndex={0} initial={{ opacity: 0, x: 44, rotate: 9, scale: 0.9 }} animate={{ opacity: 1, x: 0, rotate: 3, scale: 1 }} transition={{ duration: 1, delay: 0.5, ease }}>
+              <motion.div className={`hero-flip-card hero-flip-secondary${flippedHeroCard === "secondary" ? " is-flipped" : ""}`} role="button" tabIndex={0} aria-pressed={flippedHeroCard === "secondary"} onClick={() => toggleHeroCard("secondary")} onKeyDown={(event) => handleHeroCardKeyDown(event, "secondary")} initial={{ opacity: 0, x: 44, rotate: 9, scale: 0.9 }} animate={{ opacity: 1, x: 0, rotate: 3, scale: 1 }} transition={{ duration: 1, delay: 0.5, ease }}>
                 <div className="hero-flip-inner">
                   <div className="hero-flip-face hero-flip-front hero-side-card">
                     <img src={STREET_CARD_PATH} alt="Евгений Корнилов на улице с коллегами" />
