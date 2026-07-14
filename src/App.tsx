@@ -49,6 +49,12 @@ function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
+const marketingCreativeImages = [
+  { src: "/images/marketing/b2c-7.png", alt: "Рекламный креатив Freedom Telecom" },
+  { src: "/images/marketing/b2c-4.png", alt: "Рекламный креатив со скоростным интернетом" },
+  { src: "/images/marketing/b2c-3.png", alt: "Рекламный креатив с тарифом" },
+];
+
 function AnimatedName() {
   const firstName = "Евгений";
   const lastName = "Корнилов";
@@ -268,6 +274,53 @@ function AlienAbductionScene({ active }: { active: boolean }) {
   );
 }
 
+function MarketingDecisionVisual() {
+  return (
+    <motion.figure
+      whileHover={{ scale: 1.012, rotate: -0.25 }}
+      transition={{ duration: 0.45, ease }}
+      className="decision-visual"
+    >
+      <img src="/images/marketing/decision-handshake-cat.png" alt="" loading="lazy" />
+    </motion.figure>
+  );
+
+  /*
+  return (
+    <motion.div
+      whileHover={{ scale: 1.018, rotate: -0.4 }}
+      transition={{ duration: 0.45, ease }}
+      className="decision-visual"
+      aria-label="Коллаж: маркетинговые отчёты, рекламные креативы и портрет"
+    >
+      <div className="decision-grid">
+        {marketingCreativeImages.map((image, index) => (
+          <figure className={`creative-card creative-card-${index + 1}`} key={image.src}>
+            <img src={image.src} alt={image.alt} loading="lazy" />
+          </figure>
+        ))}
+      </div>
+      <div className="report-card report-card-main">
+        <small>ROMI / funnel / MQL</small>
+        <strong>+117%</strong>
+        <span>рост клиентской базы</span>
+        <i />
+      </div>
+      <div className="report-card report-card-side">
+        <small>dashboard</small>
+        <div><b style={{ height: "64%" }} /><b style={{ height: "88%" }} /><b style={{ height: "46%" }} /><b style={{ height: "76%" }} /></div>
+      </div>
+      <div className="decision-face">
+        <img src={PROFILE_SELFIE_PATH} alt="Евгений Корнилов" loading="lazy" />
+      </div>
+      <span className="decision-glow decision-glow-1" />
+      <span className="decision-glow decision-glow-2" />
+      <p>Решения рождаются там, где цифры, креативы и здравый смысл наконец-то разговаривают друг с другом.</p>
+    </motion.div>
+  );
+  */
+}
+
 function CaseDeck() {
   const [active, setActive] = useState(0);
   const item = cases[active];
@@ -385,18 +438,22 @@ function ContactVault() {
       {contacts.map((contact, index) => {
         const isOpen = revealed === contact.key;
         return (
-          <motion.div layout key={contact.key} className={`contact-row ${isOpen ? "is-open" : ""}`}>
+          <motion.div key={contact.key} className={`contact-row ${isOpen ? "is-open" : ""}`}>
             <button type="button" onClick={() => setRevealed(isOpen ? null : contact.key)} aria-expanded={isOpen}>
               <span>0{index + 1}</span><b>{contact.label}</b><span>{isOpen ? "−" : "+"}</span>
             </button>
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.45, ease }} className="contact-reveal">
-                  <small>{contact.note}</small>
-                  <a href={contact.href} target={contact.key === "telegram" ? "_blank" : undefined} rel={contact.key === "telegram" ? "noreferrer" : undefined}>{contact.value}<Arrow /></a>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <motion.div
+              initial={false}
+              animate={{ gridTemplateRows: isOpen ? "1fr" : "0fr", opacity: isOpen ? 1 : 0 }}
+              transition={{ duration: 0.58, ease }}
+              className="contact-reveal"
+              aria-hidden={!isOpen}
+            >
+              <div className="contact-reveal-inner">
+                <small>{contact.note}</small>
+                <a href={contact.href} target={contact.key === "telegram" ? "_blank" : undefined} rel={contact.key === "telegram" ? "noreferrer" : undefined}>{contact.value}<Arrow /></a>
+              </div>
+            </motion.div>
           </motion.div>
         );
       })}
@@ -408,36 +465,29 @@ export default function App() {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 25, mass: 0.2 });
   const heroRef = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
-  const [parallaxMode, setParallaxMode] = useState<"desktop" | "tablet" | "mobile">("desktop");
+  const prefersReducedMotion = useReducedMotion();
+  const [isMobileHero, setIsMobileHero] = useState(false);
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end end"],
   });
-  const smoothHeroProgress = useSpring(heroProgress, { stiffness: 85, damping: 26, mass: 0.35 });
-
-  const skyY = useTransform(smoothHeroProgress, [0, 1], ["0vh", reduceMotion ? "0vh" : parallaxMode === "mobile" ? "1.5vh" : parallaxMode === "tablet" ? "4vh" : "6vh"]);
-  const skyScale = useTransform(smoothHeroProgress, [0, 1], [1.04, reduceMotion ? 1.04 : parallaxMode === "mobile" ? 1.045 : parallaxMode === "tablet" ? 1.06 : 1.08]);
-  const foregroundY = useTransform(smoothHeroProgress, [0, 1], ["0vh", reduceMotion ? "0vh" : parallaxMode === "mobile" ? "-6vh" : parallaxMode === "tablet" ? "-11vh" : "-16vh"]);
-  const foregroundScale = useTransform(smoothHeroProgress, [0, 1], [1.02, reduceMotion ? 1.02 : parallaxMode === "mobile" ? 1.05 : parallaxMode === "tablet" ? 1.08 : 1.12]);
-  const contentY = useTransform(smoothHeroProgress, [0, 1], ["0vh", reduceMotion ? "0vh" : parallaxMode === "mobile" ? "-1vh" : "-3vh"]);
-  const contentOpacity = useTransform(smoothHeroProgress, [0, 0.72, 1], [1, 1, reduceMotion ? 1 : 0.88]);
-
-  useEffect(() => {
-    const mobile = window.matchMedia("(max-width: 700px)");
-    const tablet = window.matchMedia("(max-width: 1100px)");
-    const updateMode = () => setParallaxMode(mobile.matches ? "mobile" : tablet.matches ? "tablet" : "desktop");
-    updateMode();
-    mobile.addEventListener("change", updateMode);
-    tablet.addEventListener("change", updateMode);
-    return () => {
-      mobile.removeEventListener("change", updateMode);
-      tablet.removeEventListener("change", updateMode);
-    };
-  }, []);
+  const skyY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["0vh", "1vh"] : ["0vh", "6vh"]);
+  const skyScale = useTransform(heroProgress, [0, 1], prefersReducedMotion ? [1.04, 1.04] : isMobileHero ? [1.02, 1.025] : [1.04, 1.08]);
+  const foregroundY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["1vh", "-6vh"] : ["2vh", "-16vh"]);
+  const foregroundScale = useTransform(heroProgress, [0, 1], prefersReducedMotion ? [1.02, 1.02] : isMobileHero ? [1.01, 1.05] : [1.02, 1.11]);
+  const heroContentY = useTransform(heroProgress, [0, 1], prefersReducedMotion ? ["0vh", "0vh"] : isMobileHero ? ["0vh", "-1vh"] : ["0vh", "-3vh"]);
+  const heroContentOpacity = useTransform(heroProgress, [0, 0.78, 1], prefersReducedMotion ? [1, 1, 1] : [1, 1, 0.87]);
 
   useEffect(() => {
     document.title = "Евгений Корнилов — маркетинг, который влияет на бизнес";
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const updateHeroMode = () => setIsMobileHero(media.matches);
+    updateHeroMode();
+    media.addEventListener("change", updateHeroMode);
+    return () => media.removeEventListener("change", updateHeroMode);
   }, []);
 
   return (
@@ -452,31 +502,16 @@ export default function App() {
       </header>
 
       <main>
-        <section className="hero-scene" id="top" ref={heroRef}>
-          <div className="hero">
-            <div className="parallax-background" aria-hidden="true">
-              <motion.img
-                className="parallax-layer sky-layer"
-                src="/images/hero/grove-street-sky.png"
-                alt=""
-                width="1916"
-                height="821"
-                decoding="async"
-                style={{ y: skyY, scale: skyScale }}
-              />
-              <motion.img
-                className="parallax-layer foreground-layer"
-                src="/images/hero/grove-street-foreground.png"
-                alt=""
-                width="1916"
-                height="821"
-                decoding="async"
-                style={{ y: foregroundY, scale: foregroundScale }}
-              />
+        <section className="hero" id="top" ref={heroRef}>
+          <div className="hero-stage">
+            <div className="hero-parallax" aria-hidden="true">
+              <motion.img className="hero-parallax-sky" src="/images/hero/grove-street-sky.png" alt="" style={{ y: skyY, scale: skyScale }} />
+              <motion.img className="hero-parallax-foreground" src="/images/hero/grove-street-foreground.png" alt="" style={{ y: foregroundY, scale: foregroundScale }} />
+              <div className="hero-parallax-shade" />
             </div>
-            <div className="hero-shading" aria-hidden="true" />
             <div className="hero-noise" />
-            <motion.div className="hero-copy" style={{ y: contentY, opacity: contentOpacity }}>
+            <motion.div className="hero-content" style={{ y: heroContentY, opacity: heroContentOpacity }}>
+              <div className="hero-copy">
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }} className="hero-eyebrow">CMO · Head of Marketing · Москва / Remote</motion.p>
             <h1>
               <motion.span initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.9, ease }}>Head</motion.span>
@@ -488,8 +523,8 @@ export default function App() {
               <span className="job-search-mark">Ищу работу</span>
             </motion.p>
             <div className="hero-actions"><a href="#cases">Смотреть результаты <Arrow /></a><a href="#contact">Связаться</a></div>
-            </motion.div>
-            <motion.div className="hero-portrait-stack" style={{ y: contentY, opacity: contentOpacity }}>
+              </div>
+              <div className="hero-portrait-stack">
             <div className="hero-photo-cluster">
               <motion.div className="hero-portrait" initial={{ opacity: 0, scale: 1.08, clipPath: "inset(15% 0 0 18% round 40px)" }} animate={{ opacity: 1, scale: 1, clipPath: "inset(0 0 0 0 round 40px)" }} transition={{ duration: 1.2, delay: 0.2, ease }}>
                 <img src={PROFILE_SELFIE_PATH} alt="Евгений Корнилов" />
@@ -498,12 +533,10 @@ export default function App() {
               </motion.div>
               <motion.div className="hero-side-card" initial={{ opacity: 0, x: 44, rotate: 9, scale: 0.9 }} animate={{ opacity: 1, x: 0, rotate: 3, scale: 1 }} transition={{ duration: 1, delay: 0.5, ease }}>
                 <img src={STREET_CARD_PATH} alt="Евгений Корнилов на улице с коллегами" />
-                <span>people / context / taste</span>
               </motion.div>
             </div>
             <AnimatedName />
-            </motion.div>
-            <motion.div className="hero-metrics" style={{ y: contentY, opacity: contentOpacity }}>
+              </div>
               <MetricStrip />
             </motion.div>
           </div>
@@ -512,7 +545,12 @@ export default function App() {
         <motion.section {...sectionMotion} className="profile" id="profile">
           <Reveal><SectionLabel index="01">Профиль</SectionLabel></Reveal>
           <div className="profile-intro">
-            <Reveal><h2>Не «делаю рекламу». Строю <span>бизнес-функцию</span></h2></Reveal>
+            <Reveal>
+              <h2 className="profile-statement">
+                <small>Не «делаю рекламу»</small>
+                <strong>Строю <span>бизнес-функцию</span></strong>
+              </h2>
+            </Reveal>
             <EditorTyping text={profileBlocks[0].text} />
           </div>
           <div className="profile-visuals">
@@ -541,12 +579,9 @@ export default function App() {
 
         <motion.section {...sectionMotion} className="principles">
           <div className="principles-sticky">
-            <SectionLabel index="02">Операционная система</SectionLabel>
+            <SectionLabel index="02">Рабочий подход</SectionLabel>
             <h2>Как я принимаю <i>решения</i></h2>
-            <motion.figure whileHover={{ scale: 1.025, rotate: -1 }} transition={{ duration: 0.45, ease }} className="principles-image">
-              <img src={teamPhotos[0].src} alt={teamPhotos[0].alt} loading="lazy" />
-              <figcaption>Решения рождаются на стыке данных, людей и общего контекста.</figcaption>
-            </motion.figure>
+            <MarketingDecisionVisual />
           </div>
           <div className="principle-list">
             {principles.map((principle) => (
