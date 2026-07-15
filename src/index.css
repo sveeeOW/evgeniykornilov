@@ -43,8 +43,8 @@ section { scroll-margin-top: 96px; }
 .hero-parallax img { position: absolute; inset: -4% 0 0; width: 100%; max-width: none; height: 108%; object-fit: cover; pointer-events: none; will-change: transform; backface-visibility: hidden; transform-origin: center bottom; }
 .hero-parallax-sky { z-index: 1; object-position: center 42%; filter: saturate(.46) hue-rotate(132deg) brightness(.42) contrast(1.2); }
 .hero-archive-stars { position: absolute; inset: 0 0 36%; z-index: 2; opacity: .38; background-image: radial-gradient(circle, rgba(222,240,219,.8) 0 1px, transparent 1.5px), radial-gradient(circle, rgba(144,208,199,.62) 0 1px, transparent 1.5px); background-position: 0 0, 42px 33px; background-size: 83px 83px, 127px 127px; animation: archiveStars 13s steps(2) infinite; }
-.hero-ufo-layer { position: absolute; inset: 0; z-index: 3; will-change: transform; }
-.archive-ufo { position: absolute; display: block; width: clamp(64px, 6.2vw, 118px); aspect-ratio: 2 / 1; color: #a8ffc6; filter: drop-shadow(0 0 12px rgba(116,255,169,.34)); will-change: transform, opacity; }
+.hero-ufo-layer { position: absolute; inset: 0; z-index: 3; }
+.archive-ufo { position: absolute; display: block; width: clamp(64px, 6.2vw, 118px); aspect-ratio: 2 / 1; color: #a8ffc6; contain: paint; will-change: transform, opacity; }
 .archive-ufo > i { position: absolute; left: 31%; top: 5%; width: 38%; height: 42%; border: 1px solid rgba(191,226,221,.7); border-radius: 52% 52% 22% 22%; background: linear-gradient(180deg, rgba(178,218,216,.68), rgba(22,45,43,.92)); box-shadow: inset 0 0 10px rgba(188,238,236,.24); }
 .archive-ufo > b { position: absolute; left: 4%; top: 34%; width: 92%; height: 34%; border: 1px solid rgba(207,231,221,.56); border-radius: 50%; background: linear-gradient(180deg, #687b76, #162321 58%, #050807); box-shadow: 0 5px 10px rgba(0,0,0,.48); }
 .archive-ufo > em { position: absolute; left: 32%; top: 58%; width: 36%; height: 92%; opacity: 0; background: linear-gradient(180deg, rgba(180,255,196,.34), transparent); clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%); animation: archiveBeamPulse 9s ease-in-out infinite; }
@@ -59,22 +59,26 @@ section { scroll-margin-top: 96px; }
 .hero-front-field { position: absolute; z-index: 5; left: -7%; right: -7%; bottom: -14%; height: 52%; overflow: hidden; border-radius: 52% 48% 0 0 / 11% 9% 0 0; background: radial-gradient(ellipse 60% 22% at 55% 8%, rgba(73,104,69,.3), transparent 70%), repeating-linear-gradient(102deg, transparent 0 27px, rgba(160,180,111,.055) 28px 30px, transparent 31px 56px), repeating-linear-gradient(176deg, rgba(140,168,94,.055) 0 2px, transparent 2px 13px), linear-gradient(180deg, #1d3020 0, #101d14 28%, #050a08 82%); box-shadow: inset 0 18px 45px rgba(95,132,83,.08); -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.14) 13%, rgba(0,0,0,.62) 31%, #000 52%); mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.14) 13%, rgba(0,0,0,.62) 31%, #000 52%); transform-origin: center bottom; will-change: transform; }
 .hero-front-field::before { content: ""; position: absolute; inset: 4% 0 0; opacity: .55; background: repeating-linear-gradient(82deg, transparent 0 14px, rgba(167,190,112,.1) 15px 16px, transparent 17px 33px), repeating-linear-gradient(97deg, transparent 0 22px, rgba(6,16,10,.36) 23px 25px, transparent 26px 49px); mask-image: linear-gradient(180deg, rgba(0,0,0,.2), #000 74%); }
 .hero-front-field::after { content: ""; position: absolute; left: -2%; right: -2%; top: 0; height: 16%; opacity: .46; background: radial-gradient(ellipse at 50% 100%, #243827 0 58%, transparent 60%) 0 100% / 23px 28px repeat-x; filter: blur(.45px); }
-.hero-archive-fog { position: absolute; inset: 36% -18% 0; z-index: 6; opacity: .62; filter: blur(25px); will-change: transform; }
-.hero-archive-fog i { position: absolute; width: 58%; height: 26%; border-radius: 50%; background: rgba(152,186,169,.13); animation: archiveFog 25s ease-in-out infinite alternate; }
+.hero-archive-fog { position: absolute; inset: 36% -18% 0; z-index: 6; opacity: .62; will-change: transform; }
+.hero-archive-fog i { position: absolute; width: 58%; height: 26%; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(152,186,169,.16), rgba(152,186,169,.07) 44%, transparent 74%); animation: archiveFog 25s ease-in-out infinite alternate; }
 .hero-archive-fog i:nth-child(1) { left: -8%; top: 18%; }
 .hero-archive-fog i:nth-child(2) { left: 30%; top: 5%; animation-delay: -9s; animation-duration: 31s; }
 .hero-archive-fog i:nth-child(3) { right: -6%; top: 33%; animation-delay: -15s; animation-duration: 36s; }
 .hero-parallax-shade { position: absolute; inset: 0; z-index: 7; background: radial-gradient(ellipse at 18% 40%, rgba(3,9,8,.34) 0, rgba(3,9,8,.62) 37%, transparent 67%), linear-gradient(90deg, rgba(1,6,5,.6), rgba(2,8,7,.14) 58%, rgba(1,6,5,.36)), linear-gradient(180deg, rgba(2,7,7,.18), transparent 52%, rgba(3,8,7,.42)); }
 .hero-scanlines { position: absolute; inset: 0; z-index: 8; opacity: .17; background: repeating-linear-gradient(180deg, transparent 0 3px, rgba(2,10,8,.32) 3px 4px); mix-blend-mode: multiply; }
-.hero-noise { position: absolute; inset: 0; z-index: 9; opacity: .1; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E"); animation: archiveGrain .28s steps(2) infinite; }
+.hero-noise { position: absolute; inset: 0; z-index: 9; opacity: .1; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E"); animation: archiveGrain 1.1s steps(2) infinite; }
 @keyframes archiveStars { 50% { opacity: .24; } }
 @keyframes archiveUfoDrift { 0% { transform: translate3d(0, 2vh, 0) rotate(-4deg) scale(.8); opacity: 0; } 9% { opacity: .8; } 47% { transform: translate3d(63vw, -4vh, 0) rotate(2deg) scale(1); opacity: .86; } 91% { opacity: .72; } 100% { transform: translate3d(128vw, 5vh, 0) rotate(-2deg) scale(.84); opacity: 0; } }
 @keyframes archiveUfoHover { 0%, 100% { transform: translate3d(0, 0, 0) rotate(2deg); } 36% { transform: translate3d(-2.4vw, -1.5vh, 0) rotate(-2deg); } 68% { transform: translate3d(1.4vw, 1vh, 0) rotate(1deg); } }
 @keyframes archiveUfoFar { 0% { transform: translate3d(0, 0, 0) scale(.65); opacity: 0; } 12% { opacity: .46; } 50% { transform: translate3d(-33vw, 3vh, 0) scale(.82); opacity: .62; } 88% { opacity: .4; } 100% { transform: translate3d(-68vw, -1vh, 0) scale(.58); opacity: 0; } }
 @keyframes archiveBeamPulse { 0%, 67%, 100% { opacity: 0; transform: scaleY(.2); } 73%, 82% { opacity: .5; transform: scaleY(1); } 91% { opacity: 0; transform: scaleY(1.08); } }
-@keyframes archiveLights { 50% { opacity: .45; filter: brightness(1.6); } }
+@keyframes archiveLights { 50% { opacity: .42; } }
 @keyframes archiveFog { from { transform: translate3d(-8%, 0, 0) scale(1); opacity: .35; } to { transform: translate3d(14%, -3%, 0) scale(1.15); opacity: .7; } }
 @keyframes archiveGrain { 0% { transform: translate3d(0,0,0); } 25% { transform: translate3d(-1%,1%,0); } 50% { transform: translate3d(1%,-1%,0); } 75% { transform: translate3d(.5%,1%,0); } }
+.hero.is-ambient-paused *, .hero.is-ambient-paused *::before, .hero.is-ambient-paused *::after { animation-play-state: paused !important; }
+.hero.is-low-power .archive-ufo-far { display: none; }
+.hero.is-low-power .hero-noise { animation: none; }
+.hero.is-low-power .hero-archive-fog i { animation: none; }
 .hero-copy { position: relative; z-index: 2; min-width: 0; align-self: center; }
 .hero-eyebrow { margin: 0 0 26px; color: var(--lime); font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
 .hero h1 { margin: 0; font-size: clamp(3.8rem, 6.65vw, 8.8rem); font-weight: 720; line-height: .9; letter-spacing: 0; text-transform: none; }
@@ -495,7 +499,7 @@ section { scroll-margin-top: 96px; }
   .archive-ufo-far { display: none; }
   .archive-ufo-drift { animation-duration: 39s; }
   .archive-ufo-hover { left: 66%; width: 76px; opacity: .68; }
-  .hero-archive-fog { opacity: .4; filter: blur(32px); }
+  .hero-archive-fog { opacity: .4; }
   .hero-scanlines { opacity: .1; }
   .hero h1 { font-size: clamp(3.45rem, 18vw, 5.4rem); }
   .hero-lead { margin-top: 28px; font-size: 15px; }

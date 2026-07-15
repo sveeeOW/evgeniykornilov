@@ -467,6 +467,8 @@ export default function App() {
   const heroRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const [isMobileHero, setIsMobileHero] = useState(false);
+  const [isHeroActive, setIsHeroActive] = useState(true);
+  const [isLowPowerDevice, setIsLowPowerDevice] = useState(false);
   const [flippedHeroCard, setFlippedHeroCard] = useState<"primary" | "secondary" | null>(null);
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
@@ -497,6 +499,32 @@ export default function App() {
     return () => media.removeEventListener("change", updateHeroMode);
   }, []);
 
+  useEffect(() => {
+    const device = navigator as Navigator & { deviceMemory?: number };
+    const hasLimitedCpu = typeof device.hardwareConcurrency === "number" && device.hardwareConcurrency <= 4;
+    const hasLimitedMemory = typeof device.deviceMemory === "number" && device.deviceMemory <= 4;
+    setIsLowPowerDevice(hasLimitedCpu || hasLimitedMemory);
+  }, []);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+
+    let isInViewport = true;
+    const syncMotionState = () => setIsHeroActive(isInViewport && !document.hidden);
+    const observer = new IntersectionObserver(([entry]) => {
+      isInViewport = entry.isIntersecting;
+      syncMotionState();
+    }, { rootMargin: "120px 0px", threshold: 0.01 });
+
+    observer.observe(hero);
+    document.addEventListener("visibilitychange", syncMotionState);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", syncMotionState);
+    };
+  }, []);
+
   const toggleHeroCard = (card: "primary" | "secondary") => {
     if (!isMobileHero || prefersReducedMotion) return;
     setFlippedHeroCard((current) => current === card ? null : card);
@@ -520,7 +548,7 @@ export default function App() {
       </header>
 
       <main>
-        <section className="hero" id="top" ref={heroRef}>
+        <section className={`hero${isHeroActive ? "" : " is-ambient-paused"}${isLowPowerDevice ? " is-low-power" : ""}`} id="top" ref={heroRef}>
           <div className="hero-stage">
             <div className="hero-parallax" aria-hidden="true">
               <motion.img className="hero-parallax-sky" src="/images/hero/grove-street-sky.png" alt="" style={{ y: skyY, scale: skyScale }} />
