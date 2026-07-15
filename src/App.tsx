@@ -507,6 +507,50 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    let frameId = 0;
+    let startTimer = 0;
+    const runFrameProbe = () => {
+      let startedAt = 0;
+      let previousFrame = 0;
+      let frameCount = 0;
+      let slowFrameCount = 0;
+
+      const sampleFrame = (timestamp: number) => {
+        if (!startedAt) {
+          startedAt = timestamp;
+          previousFrame = timestamp;
+        } else {
+          const frameDuration = timestamp - previousFrame;
+          previousFrame = timestamp;
+          frameCount += 1;
+          if (frameDuration > 24) slowFrameCount += 1;
+        }
+
+        const elapsed = timestamp - startedAt;
+        if (elapsed < 1800) {
+          frameId = requestAnimationFrame(sampleFrame);
+          return;
+        }
+
+        const averageFps = frameCount * 1000 / Math.max(elapsed, 1);
+        const slowFrameRatio = slowFrameCount / Math.max(frameCount, 1);
+        if (averageFps < 50 || slowFrameRatio > 0.2) setIsLowPowerDevice(true);
+        if (heroRef.current) heroRef.current.dataset.measuredFps = averageFps.toFixed(1);
+      };
+
+      frameId = requestAnimationFrame(sampleFrame);
+    };
+
+    startTimer = window.setTimeout(runFrameProbe, 1500);
+    return () => {
+      window.clearTimeout(startTimer);
+      cancelAnimationFrame(frameId);
+    };
+  }, [prefersReducedMotion]);
+
+  useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
 
@@ -537,7 +581,7 @@ export default function App() {
   };
 
   return (
-    <div className="cv-shell">
+    <div className={`cv-shell${isLowPowerDevice ? " is-low-power" : ""}`}>
       <motion.div className="page-progress" style={{ scaleX: progress }} />
       <header className="topbar">
         <a className="identity" href="#top" aria-label="В начало"><span>ЕК</span><b>Евгений Корнилов</b></a>
